@@ -3,6 +3,8 @@
 ## Project Overview
 This project focuses on implementing an advanced IoT network custom protocol using the RPL (Routing Protocol for Lossy networks) with a time-window expiration parameter. The primary goals are to handle power consumption and reduce network congestion.
 
+Read `ProjectPresentation.pdf` for more info. 
+
 ## Project Goals
 - Implement the RPL protocol with a time-window expiration parameter.
 - Introduce performance and optimization strategies to enhance efficiency.
