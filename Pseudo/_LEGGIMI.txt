@@ -1,0 +1,2 @@
+Per ottimizzare i tempi, ho solo descritto gli pseudocodici dei due principali algoritmi. 
+Quello non ottimizzato l'ho lasciato perdere e lo spiegherò meglio a voce.

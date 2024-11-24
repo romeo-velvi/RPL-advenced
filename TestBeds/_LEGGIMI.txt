@@ -1,0 +1,10 @@
+Per implementare al meglio il progetto e per fare i dovuti casi di test, ho diviso il progetto in tre differenti casi di test. 
+Ognuno di essi espone una particolare topologia con determinati criteri.
+
+I test sono stati fatti con 3 codici diversi: 
+- uno per i sink (ClockSyncNode)
+- due per i sensori (SensorsNode e SimpleNode)
+	* SensorNode è l'algoritmo RPL ottimizzato
+	* SimpleNode è l'algoritmo RPL semplice (non ottimizzato)
+
+P.S. Quando i nodi diventano gialli (mark 1) vuol dire che la comunicazione è andata a buon fine

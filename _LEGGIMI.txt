@@ -1,0 +1,6 @@
+La cartella è stata divisa in questi sezioni: 
+
+[1] Codes: dove stanno i codici SenScript (commentati) per le varie entità.
+[2] Pseudo: dove stanno i pseudocodici per le varie entità.
+[3] TestBeds: stanno i progetti CapCarbon con i vari scenari topologici.
+[4] (Aggiuntivo) Notepad: ho riprogettato il meccanismo di highlighting del testo per Notepad++ (potete inoltrarlo agli altri studenti). 

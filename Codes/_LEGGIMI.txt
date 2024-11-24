@@ -1,0 +1,3 @@
+NOTA: Nei commenti potete leggere anche "// ###### HopChronologyPockedData"
+Questi fanno riferimento a dei meccanismi che sono stati ideati e spiegati più in dettaglio nella presentazione. 
+Altrimenti il codice sarebbe stato 80% solo commenti :')

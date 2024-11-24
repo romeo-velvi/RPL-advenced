@@ -1,0 +1,26 @@
+let loop = true;
+let simulationVariables = {this.sensorsNumber, this.lowestID}
+
+let syncVersion = 0;
+
+do{
+
+ let T = curretTime();
+ let limitTime = T+simulationVariables*10;
+ let chosenSlot = 1+(syncVersion%this.numberOfSlots);
+ let hops = [];
+ let newSyncMessage = generateNewSyncMessage(
+	syncVersion,
+	chosenSlot,
+	this.numberOfSlots,
+	limitTime,
+	this.id,
+	simulationVariables,
+	hops
+ );
+ send(newSyncMessage,*);
+ syncVersion ++;
+ delay this.sensorsNumber*100
+
+} while(loop);
+

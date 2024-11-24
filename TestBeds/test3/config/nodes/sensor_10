@@ -9,4 +9,4 @@ device_radius:0.0
 device_hide:0
 device_draw_battery:true
 device_sensor_unit_radius:20.0
-device_script_file_name:SensorNode.csc
+device_script_file_name:SimpleNode.csc

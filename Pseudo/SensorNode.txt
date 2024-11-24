@@ -1,0 +1,118 @@
+let canSend = false;
+let sendingKind = "MSG";
+let versionPhased = null;
+let directive = null;
+let retryCounter = 0;
+let versionPhased = 0;
+
+let packToBeAcked = null;
+let messageSent = null;
+
+let loop = true;
+
+do{
+
+let T = curretTime();
+let neighborsNumber = neighboursNumber();
+let neighborsSet = neighboursSet();
+
+let pack = receivePack();
+let kindPack = getKindPack(pack);
+let data = readAllDataFromPack(kindPack);
+
+if (data.kind == "SYN" && data.packVersion > versionPhased) {
+	directive = data;
+	versionPhased = directive.packVerion;
+	let slot = generateSlot(1,directive.numberOfSlots);
+	canSend = (slot == directive.chosenSlot) ? true : false;
+	let packToTransmit = clonePackWithNewStack(directive,this.sensorID);
+	cleverSend(packToTransmit);
+}
+
+if (data.kind == "MSG" || data.kind == "ACK") {
+	let loopPackCount = getBufferedPackCount(data);	
+	if (loopPackCount == 0){
+		addPackToBuffer(data);
+	}
+	elseif (loopPackCount > this.maxNumberLoop){
+		discardPack(pack);
+	}
+}
+elseif (data.kind == "MSG") {
+	if (data.receiverID == this.sensorID){
+		packToBeAcked = pack;
+		sendingKind = "ACK";
+	}
+	elseif (data.messageTime >= data.limitTime) {
+		discardPack(pack);
+	}
+	else {
+		let packToTransmit = clonePackWithNewStack(pack,sensorID);
+		cleverSend(packToTransmit);
+	}
+}
+elseif (data.kind == "ACK") {
+	if (data.receiverID == this.sensorID) {
+		log("communication succeded!");
+		sendingKind = "MSG";
+	}
+	elseif (data.messageTime >= data.limitTime) {
+		discardPack(pack);
+	}
+	else{
+		let hopIndex = findHopIndex(data.hops,sensorID);
+		if(hopIndex > 0 && hopIndex+1 < this.hopSize) {
+			send(pack, data.hops[hopIndex+1]);
+		}
+		else {
+			let packToTransmit = clonePackWithNewStack(pack,sensorID);
+			cleverSend(packToTransmit);
+		}	
+	}
+}
+
+if (canSend == true && sendingKind == "MSG") {
+	if (retryCounter == 0) {
+		let dataMessage = rgauss();
+		let hops = [];
+		let receiverID = specularSensor(
+			this.sensorID, 
+			directive.sensorsNumber, 
+			directive.loswestID
+		);
+		let message = generateNewMessage(
+			T,
+			directive.limitTime,
+			this.sensorID,
+			receiverID,
+			dataMessage,
+			hops
+		);
+		cleverSend(message);
+		messageSent = message;
+		retryCounter ++;
+	}
+	elseif (retryCounter < this.maxRetry) {
+		messageSent.timeToLive = directive.limitTime+(10*directive.limitTime)/100;
+		cleverSending(messageSent);
+		retryCounter ++;	
+	}
+}
+elseif (canSend == true && sendingKind == "ACK") {
+	let dataToBeAcked = readAllDataFromPack(packToBeAcked);
+	let ack = generateNewAck(
+		T,
+		directive.limitTime,
+		this.sensorID,
+		dataToBeAcked.senderID,
+		dataToBeAcked.data,
+		reverseStack(dataToBeAcked.hops)
+	);
+	sendingKind = "NIL";
+	packToBeAcked = null;
+}
+
+loop = (this.sensorBattery>0) true : false;
+
+} while(loop);
+
